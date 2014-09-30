@@ -108,10 +108,9 @@ $app->post('/login', function() use ($app) {
  
                 if ($user != NULL) {
                     $response["error"] = false;
-                    $response['name'] = $user['name'];
                     $response['email'] = $user['email'];
-                    $response['apiKey'] = $user['api_key'];
-                    $response['createdAt'] = $user['created_at'];
+                    $response['api_key'] = $user['api_key'];
+                    $response['message'] = 'You have been successfully loggedin.';
                 } else {
                     // unknown error occurred
                     $response['error'] = true;
@@ -120,7 +119,7 @@ $app->post('/login', function() use ($app) {
             } else {
                 // user credentials are wrong
                 $response['error'] = true;
-                $response['message'] = 'Login failed. Incorrect credentials';
+                $response['message'] = 'Invalid email or password.';
             }
  
             echoRespnse(200, $response);
@@ -142,7 +141,7 @@ function authenticate(\Slim\Route $route) {
         if (!$db->isValidApiKey($api_key)) {
             // api key is not present in users table
             $response["error"] = true;
-            $response["message"] = "Access Denied. Invalid Api key";
+            $response["message"] = "Access Denied. Invalid api_key";
             echoRespnse(401, $response);
             $app->stop();
         } else {
